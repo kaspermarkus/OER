@@ -61,6 +61,7 @@ getHTMLContent = function (url, callback){
 								html += '</div>';
 								html += '<div class="instructions">';
 								html += '<h3>'+step.html_instructions+'</h3>';
+								html += '<h3 class="translation"></h3>';
 								html += "<p>Duration: "+step.duration.text+"</p>";
 								html += "<p>Distance: "+step.distance.text+"</p>";
 								html += '<p class="step_warning">';

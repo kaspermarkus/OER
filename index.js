@@ -13,7 +13,7 @@ require('./streetView.js');
 
 // Translation related Language parameters:
 var fromLang = "en",
-    toLang = "es";
+    toLang = "zh";
 
 //set up translator
 var client = new msTranslator({
@@ -37,17 +37,17 @@ app.get('/', function(req, res){
         $("#step_content").html(html);
         // console.log(instructionStrings);
         //translate all instructions
-        res.send($.html());
-        // client.translateArray({texts: instructionStrings, from: fromLang, to: toLang}, function(err, data) {
-        //     var translationEls = $(".translation");
+        // res.send($.html());
+        client.translateArray({texts: instructionStrings, from: fromLang, to: toLang}, function(err, data) {
+            var translationEls = $(".translation");
 
-        //     _.each(data, function (val, index) {
-        //         // console.log("bla"+$(translationEls[index]).html());
-        //         $(translationEls[index]).html("("+val.TranslatedText+")");
-        //     });
+            _.each(data, function (val, index) {
+                // console.log("bla"+$(translationEls[index]).html());
+                $(translationEls[index]).html("("+val.TranslatedText+")");
+            });
 
-        //     res.send($.html());
-        // });
+            res.send($.html());
+        });
     });
 });
 
