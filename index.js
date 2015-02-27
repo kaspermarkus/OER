@@ -8,6 +8,17 @@ var fs = require('fs');
 
 $ = cheerio.load(fs.readFileSync('./index.html'));
 
+// Variable containing secrets, should contain at least:
+// {
+//     microsoft: {
+//         client_id: "replace_with_ms ID",
+//         client_secret: "replace with ms client secret"
+//     },
+//     google: {
+//         key: "google API key goes here"
+//     }
+// }
+require("./APISecrets.js");
 
 require('./streetView.js');
 
@@ -17,8 +28,8 @@ var fromLang = "en",
 
 //set up translator
 var client = new msTranslator({
-  client_id: "OER",
-  client_secret: "iCjexcXNhME+t9rOhdz7WribW+n8Pn0p207O7DpQMvA="
+  client_id: APISecrets.microsoft.client_id,
+  client_secret: APISecrets.microsoft.client_secret
 }, true);
 
 
@@ -30,7 +41,8 @@ app.get('/', function(req, res){
 
     // Route URL:
     var routeURL = "https://maps.googleapis.com/maps/api/directions/json?origin="+encodeURIComponent(start)+
-        "&destination="+encodeURIComponent(end)+"&mode="+method+"&key=AIzaSyCf2AEb5wOD8riXjDWtWLuFkYd5hHuvSX4";
+        "&destination="+encodeURIComponent(end)+"&mode="+method+"&key="+APISecrets.google.key;
+    console.log(routeURL);
 
     // Generate HTML
     getHTMLContent(routeURL, function (html, instructionStrings) {

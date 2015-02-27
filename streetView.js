@@ -3,19 +3,6 @@ var app = express();
 var request = require('request');
 var _ = require('underscore');
 var string = require('string');
-var msTranslator = require('mstranslator');
-
-
-// Translation related Language parameters:
-var fromLang = "en",
-    toLang = "zh";
-
-//set up translator
-var client = new msTranslator({
-  client_id: "OER",
-  client_secret: "iCjexcXNhME+t9rOhdz7WribW+n8Pn0p207O7DpQMvA="
-}, true);
-
 
 var getCoordinates = function (url){
     var latitude;
@@ -30,7 +17,7 @@ var getCoordinates = function (url){
 getHTMLContent = function (url, callback){
 	var html = "";
 	var instructionStrings = [];
-	var total_duration = "";
+	var total_duration = 0;
 	var inc = 0;
     request(url, function (error, response, body) {
         if (!error && response.statusCode == 200) {
@@ -80,17 +67,7 @@ getHTMLContent = function (url, callback){
 								html += '</div>';
 								html += '</div>';
 								html += '</div>';
-								// var lat;
-								// var lng;
-								// html += "<h1>Step "+ inc + ": </h1>";
-								// html += "<h2>" + step.html_instructions;
-
-								// //translation:
-								// html += "<div class='translation'>Translation "+inc+"</div>";
-								// html += "<h4>Duration: "+step.duration.text+"</h4>";
-								// html += "<h4>Distance: "+step.distance.text+"</h4>";
 							});
-							//console.log(html);
 						});
 					}
 				});
@@ -101,9 +78,9 @@ getHTMLContent = function (url, callback){
 }
 
 var getImageElement = function(lat, lng){
-	var imageElement = "<h3><img src='"
-	//url = "https://maps.googleapis.com/maps/api/streetview?size=200x200&location="+lat+","+lng+"&heading=235";
+	var imageElement = "<h3><img src='";
 	url = "https://maps.googleapis.com/maps/api/streetview?size=200x200&location="+lat+","+lng;
+	console.log(url);
 	imageElement = imageElement + url + "'></h3>"
 	return imageElement;
 }
