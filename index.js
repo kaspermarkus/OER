@@ -4,10 +4,12 @@ var request = require('request');
 var msTranslator = require('mstranslator');
 var cheerio = require("cheerio");
 var _ = require('underscore');
+var fs = require('fs');
+
+$ = cheerio.load(fs.readFileSync('./index.html'));
+
 
 require('./streetView.js');
-
-
 
 // Translation related Language parameters:
 var fromLang = "en",
@@ -28,25 +30,24 @@ app.get('/', function(req, res){
 
     // Route URL:
     var routeURL = "https://maps.googleapis.com/maps/api/directions/json?origin="+encodeURIComponent(start)+
-        "&destination="+encodeURIComponent(end)+"&mode&key=AIzaSyCf2AEb5wOD8riXjDWtWLuFkYd5hHuvSX4";
-
-    console.log(routeURL);
+        "&destination="+encodeURIComponent(end)+"&mode="+method+"&key=AIzaSyCf2AEb5wOD8riXjDWtWLuFkYd5hHuvSX4";
 
     // Generate HTML
     getHTMLContent(routeURL, function (html, instructionStrings) {
+        $("#step_content").html(html);
         // console.log(instructionStrings);
         //translate all instructions
-        client.translateArray({texts: instructionStrings, from: fromLang, to: toLang}, function(err, data) {
-            $ = cheerio.load(html);
-            var translationEls = $(".translation");
+        res.send($.html());
+        // client.translateArray({texts: instructionStrings, from: fromLang, to: toLang}, function(err, data) {
+        //     var translationEls = $(".translation");
 
-            _.each(data, function (val, index) {
-                // console.log("bla"+$(translationEls[index]).html());
-                $(translationEls[index]).html("("+val.TranslatedText+")");
-            });
+        //     _.each(data, function (val, index) {
+        //         // console.log("bla"+$(translationEls[index]).html());
+        //         $(translationEls[index]).html("("+val.TranslatedText+")");
+        //     });
 
-            res.send($.html());
-        });
+        //     res.send($.html());
+        // });
     });
 });
 
