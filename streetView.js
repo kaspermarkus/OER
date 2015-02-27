@@ -9,13 +9,13 @@ var getCoordinates = function (url){
 	   request(url, function (error, response, body) {
 	        if (!error && response.statusCode == 200) {
 	            var parsedJSON = JSON.parse(body);
-				console.log(parsedJSON) // Print the json object
 	        }
 	    });
 }
 
 getHTMLContent = function (url, callback){
 	var html = "";
+	var total_duration = "";
 	var inc = 0;
 	   request(url, function (error, response, body) {
 	        if (!error && response.statusCode == 200) {
@@ -25,17 +25,20 @@ getHTMLContent = function (url, callback){
 					_.each(route, function(value, key){
 						if (key == 'legs'){
 							_.each(value, function(leg, key){
+								total_duration = leg.duration.text;
+								console.log(total_duration);
 								_.each(leg.steps, function(step, key){
 									inc++;
 									var lat;
 									var lng;
 									html += "<h1>Step "+ inc + ": </h1>";
 									html += "<h2>" + step.html_instructions + "</h2>";
-									lat = step.end_location.lat;
-									lng = step.end_location.lng;
-									html = html + getImageElement(lat, lng);
+									lat = step.start_location.lat;
+									lng = step.start_location.lng;
+									html += getImageElement(lat, lng);
+									html += "<h4>Duration: "+step.duration.text+"</h4>";									
+									html += "<h4>Distance: "+step.distance.text+"</h4>";																		
 								});
-								//console.log(html);
 							});
 						}
 					});
@@ -47,7 +50,8 @@ getHTMLContent = function (url, callback){
 
 var getImageElement = function(lat, lng){
 	var imageElement = "<h3><img src='"
-	url = "https://maps.googleapis.com/maps/api/streetview?size=200x200&location="+lat+","+lng+"&heading=235";
+	//url = "https://maps.googleapis.com/maps/api/streetview?size=200x200&location="+lat+","+lng+"&heading=235";
+	url = "https://maps.googleapis.com/maps/api/streetview?size=200x200&location="+lat+","+lng;	
 	imageElement = imageElement + url + "'></h3>"
 	return imageElement;
 }
