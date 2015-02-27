@@ -5,17 +5,17 @@ var _ = require('underscore');
 
 var getCoordinates = function (url){
     var latitude;
-	var longitude;	
+	var longitude;
 	   request(url, function (error, response, body) {
 	        if (!error && response.statusCode == 200) {
 	            var parsedJSON = JSON.parse(body);
 				console.log(parsedJSON) // Print the json object
 	        }
-	    });	
+	    });
 }
 
-var getHTMLContent = function (url, callback){
-	var html = "";	
+getHTMLContent = function (url, callback){
+	var html = "";
 	var inc = 0;
 	   request(url, function (error, response, body) {
 	        if (!error && response.statusCode == 200) {
@@ -25,23 +25,23 @@ var getHTMLContent = function (url, callback){
 					_.each(route, function(value, key){
 						if (key == 'legs'){
 							_.each(value, function(leg, key){
-								_.each(leg.steps, function(step, key){									
+								_.each(leg.steps, function(step, key){
 									inc++;
 									var lat;
 									var lng;
-									html += "<h1>Step "+ inc + ": </h1>"; 									
+									html += "<h1>Step "+ inc + ": </h1>";
 									html += "<h2>" + step.html_instructions + "</h2>";
 									lat = step.end_location.lat;
-									lng = step.end_location.lng;									
+									lng = step.end_location.lng;
 									html = html + getImageElement(lat, lng);
 								});
-								//console.log(html);								
+								//console.log(html);
 							});
 						}
 					});
 				});
 			callback(html);
-	    	}//IF			
+	    	}//IF
 		});
 }
 
@@ -51,13 +51,3 @@ var getImageElement = function(lat, lng){
 	imageElement = imageElement + url + "'></h3>"
 	return imageElement;
 }
-
-
-app.get('/', function(req, res){   	
-	//getCoordinates("https://maps.googleapis.com/maps/api/directions/json?origin=Toronto&destination=Montreal&key=AIzaSyCf2AEb5wOD8riXjDWtWLuFkYd5hHuvSX4");
-    var html = getHTMLContent("https://maps.googleapis.com/maps/api/directions/json?origin=Toronto&destination=Montreal&key=AIzaSyCf2AEb5wOD8riXjDWtWLuFkYd5hHuvSX4", function (html){
-		res.send(html);	
-	});	
-});
-
-app.listen(3000);
