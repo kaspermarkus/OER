@@ -1,0 +1,13 @@
+{
+    "name": "OER",
+    "description": "OER accessibility sprint",
+    "version": "0.1.0",
+    "author": "GPII",
+    "bugs": "http://issues.gpii.net/browse/GPII",
+    "homepage": "http://gpii.net/",
+    "dependencies": {
+        "express": "4.12.0",
+        "request": "2.53.0"
+    },
+    "main": "./index.js"
+}
